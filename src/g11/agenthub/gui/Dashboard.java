@@ -1,91 +1,95 @@
 package src.g11.agenthub.gui;
 
+import javax.swing.JFrame;
+// import javax.swing.JPanel;
+
+//import src.g11.agenthub.gui.images.DashboardController;
+
+// import javax.swing.JFrame;
+// import javax.swing.JPanel;
+// import javax.swing.JMenuBar;
+// import javax.swing.BorderFactory;
+// import java.awt.CardLayout;
+// import java.awt.Dimension;
+// import java.awt.Toolkit;
+
+// public class Dashboard extends JFrame {
+//     // private JPanel mainPanel;
+//     // private JPanel navPanel;
+//     private DashboardController controller;
+
+//     public Dashboard(String user, String username) {
+//         controller = new DashboardController(this, user, username);
+//         initComponents();
+//         setUpUI();
+//     }
+
+//     private void initComponents() {
+//         // Initialize components (mainPanel, navPanel, etc.)
+//     }
+
+//     private void setUpUI() {
+//         // Set up UI layout and event listeners
+//         // Add components to mainPanel and navPanel
+//     }
+
+//     public void navigateTo(String page) {
+//         // Switch between different pages using CardLayout
+//     }
+
+//     public void NotForNormalUser() {
+//         // Hide certain UI elements for normal users
+//     }
+// }
+/******************************************************************************
+ *  Compilation:  javac GUI.java
+ *  Execution:    java GUI
+ *
+ *  A minimal Java program with a graphical user interface. The
+ *  GUI prints out the number of times the user clicks a button.
+ *
+ *  % java GUI
+ *
+ ******************************************************************************/
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Dashboard extends JFrame {
-    private CardLayout layout;
-    private JPanel mainPanel;
-    // private String userSelect;
-    // private String username;
+public class Dashboard implements ActionListener {
+    private int clicks = 0;
+    private JLabel label = new JLabel("Number of clicks:  0     ");
+    private JFrame frame = new JFrame();
 
-    public Dashboard(String userSelect, String username) {
-        // this.userSelect = userSelect;
-        // this.username = username;
+    public Dashboard() {
 
-        initComponents();
+        // the clickable button
+        JButton button = new JButton("Click Me");
+        button.addActionListener(this);
 
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("G11-logo.png")));
-        setTitle("Order Management System For Agent - " + userSelect + " : " + username);
-        setSize(1200, 800);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setVisible(true);
-    }
-
-    private void initComponents() {
-        // Create main panel with CardLayout
-        layout = new CardLayout();
-        mainPanel = new JPanel(layout);
-
-        // Create and add components to main panel
-        // mainPanel.add(new Home(), "Home");
-        // mainPanel.add(new Products(username), "Products");
-        // mainPanel.add(new Customers(), "Customers");
-        // mainPanel.add(new Agents(), "Agents");
-        // mainPanel.add(new Users(), "Users");
-        mainPanel.add(new Logs(), "Logs");
-        // // mainPanel.add(new ChangeDetails(username), "ChangeDetails");
-        // mainPanel.add(new Purchase(), "Purchase");
-        // // mainPanel.add(new About(), "About");
-
-        // Create navigation panel
-        JPanel navPanel = createNavPanel();
-
-        // Add components to content pane
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(navPanel, BorderLayout.WEST);
-        getContentPane().add(mainPanel, BorderLayout.CENTER);
-    }
-
-    private JPanel createNavPanel() {
-        JPanel navPanel = new JPanel(new GridLayout(0, 1));
-        navPanel.setBackground(Color.WHITE);
-        navPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-
-        // Add navigation buttons
-        // addButton(navPanel, "Home", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Home"));
-        // addButton(navPanel, "Products", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Products"));
-        // addButton(navPanel, "Customers", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Customers"));
-        // addButton(navPanel, "Suppliers", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Suppliers"));
-        // addButton(navPanel, "Users", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Users"));
-        // addButton(navPanel, "Logs", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Logs"));
-        // addButton(navPanel, "Change Details", "/src/g11/agenthub/gui/images/temp.jpg",
-        //         evt -> showPanel("ChangeDetails"));
-        // addButton(navPanel, "Current Stocks", "/src/g11/agenthub/gui/images/temp.jpg",
-        //         evt -> showPanel("CurrentStocks"));
-        // addButton(navPanel, "Sales Report", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("SalesReport"));
-        // addButton(navPanel, "Purchase", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Purchase"));
-        // addButton(navPanel, "About", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("About"));
-
-        return navPanel;
-    }
-
-    private void addButton(JPanel panel, String text, String iconPath, ActionListener listener) {
-        JButton button = new JButton(text);
-        button.setIcon(new ImageIcon(getClass().getResource(iconPath)));
-        button.addActionListener(listener);
+        // the panel with the button and text
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+        panel.setLayout(new GridLayout(0, 1));
         panel.add(button);
+        panel.add(label);
+
+        // set up the frame and display it
+        frame.add(panel, BorderLayout.CENTER);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Ini hanya cobaan untuk nak confirm successfull login.");
+        frame.pack();
+        frame.setVisible(true);
     }
 
-    private void showPanel(String panelName) {
-        layout.show(mainPanel, panelName);
+    // process the button clicks
+    public void actionPerformed(ActionEvent e) {
+        clicks++;
+        label.setText("Number of clicks:  " + clicks);
     }
 
+    // create one Frame
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new Dashboard("NORMAL USER", "Username");
-        });
+        new Dashboard();
     }
 }
