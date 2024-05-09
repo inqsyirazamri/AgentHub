@@ -35,7 +35,7 @@ public class Dashboard extends JFrame {
         // mainPanel.add(new Customers(), "Customers");
         // mainPanel.add(new Agents(), "Agents");
         // mainPanel.add(new Users(), "Users");
-        // // mainPanel.add(new Logs(), "Logs");
+        mainPanel.add(new Logs(), "Logs");
         // // mainPanel.add(new ChangeDetails(username), "ChangeDetails");
         // mainPanel.add(new Purchase(), "Purchase");
         // // mainPanel.add(new About(), "About");
@@ -55,19 +55,19 @@ public class Dashboard extends JFrame {
         navPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
         // Add navigation buttons
-        addButton(navPanel, "Home", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Home"));
-        addButton(navPanel, "Products", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Products"));
-        addButton(navPanel, "Customers", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Customers"));
-        addButton(navPanel, "Suppliers", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Suppliers"));
-        addButton(navPanel, "Users", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Users"));
-        addButton(navPanel, "Logs", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Logs"));
-        addButton(navPanel, "Change Details", "/src/g11/agenthub/gui/images/temp.jpg",
-                evt -> showPanel("ChangeDetails"));
-        addButton(navPanel, "Current Stocks", "/src/g11/agenthub/gui/images/temp.jpg",
-                evt -> showPanel("CurrentStocks"));
-        addButton(navPanel, "Sales Report", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("SalesReport"));
-        addButton(navPanel, "Purchase", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Purchase"));
-        addButton(navPanel, "About", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("About"));
+        // addButton(navPanel, "Home", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Home"));
+        // addButton(navPanel, "Products", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Products"));
+        // addButton(navPanel, "Customers", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Customers"));
+        // addButton(navPanel, "Suppliers", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Suppliers"));
+        // addButton(navPanel, "Users", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Users"));
+        // addButton(navPanel, "Logs", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Logs"));
+        // addButton(navPanel, "Change Details", "/src/g11/agenthub/gui/images/temp.jpg",
+        //         evt -> showPanel("ChangeDetails"));
+        // addButton(navPanel, "Current Stocks", "/src/g11/agenthub/gui/images/temp.jpg",
+        //         evt -> showPanel("CurrentStocks"));
+        // addButton(navPanel, "Sales Report", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("SalesReport"));
+        // addButton(navPanel, "Purchase", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("Purchase"));
+        // addButton(navPanel, "About", "/src/g11/agenthub/gui/images/temp.jpg", evt -> showPanel("About"));
 
         return navPanel;
     }

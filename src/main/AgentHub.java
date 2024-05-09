@@ -5,7 +5,6 @@ import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 import src.g11.agenthub.gui.LoginForm;
 
 import java.util.Properties;
-
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
