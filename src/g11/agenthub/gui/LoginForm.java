@@ -189,8 +189,8 @@ public class LoginForm extends javax.swing.JDialog {
         if (conn!= null) {
             if (dbConnection.checkLogin(username, password)) {
                 dispose();
-                // new Dashboard(userType, username);
-                new Dashboard(); //temporary while waiting for the Dashboard class completion
+                new Dashboard(userType, username);
+                //new Home(); //temporary while waiting for the Dashboard class completion
             } else {
                 JOptionPane.showMessageDialog(null, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
             }
