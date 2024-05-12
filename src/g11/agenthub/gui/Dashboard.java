@@ -1,11 +1,7 @@
 package src.g11.agenthub.gui;
 
 import javax.swing.*;
-
-import javafx.event.ActionEvent;
-
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -18,10 +14,11 @@ public class Dashboard extends JFrame {
     private JButton customersButton;
     private JButton purchasesButton;
     private JButton usersButton;
+    //String username;
 
     public Dashboard(String userType, String username) {
         initComponents();
-        setTitle("Agent Hub: Admin Home Page");
+        setTitle("Agent Hub - A Simple Order Management System for Agent");
         setSize(600, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,35 +30,35 @@ public class Dashboard extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                showMenu("Products");            
+                showMenu("Products", username);            
             }
         });
 
         agentsButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                showMenu("Agents");
+                showMenu("Agents", username);
             }
         });
 
         customersButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                showMenu("Customers");
+                showMenu("Customers", username);
             }
         });
 
         purchasesButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                showMenu("Purchases");
+                showMenu("Purchases", username);
             }
         });
 
         usersButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                showMenu("Users");
+                showMenu("Users", username);
             }
         });
 
@@ -100,9 +97,9 @@ public class Dashboard extends JFrame {
         add(mainPanel);
     }
 
-    private void showMenu(String menu) {
+    private void showMenu(String menu, String username) {
         if (menu.equalsIgnoreCase("Products")) {
-            new ProductPage();
+            new ProductPage(username);
         } else if (menu.equalsIgnoreCase("Agents")) {
             new AgentPage();
         } else if (menu.equalsIgnoreCase("Customers")) {

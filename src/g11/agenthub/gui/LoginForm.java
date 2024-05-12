@@ -30,12 +30,10 @@ public class LoginForm extends javax.swing.JDialog {
     // end of variables
 
     public LoginForm() {
-        initComponents();
-        
+        initComponents();      
     }
 
     private void initComponents() {
-
         usernameField = new javax.swing.JTextField();
         passwordField = new javax.swing.JPasswordField();
         loginButton = new javax.swing.JButton();
@@ -44,7 +42,6 @@ public class LoginForm extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Login");
-        //getContentPane().setBackground(new java.awt.Color(0, 0, 255)); // bright blue bg
 
         createUserTypeBox();
         createUsernameComponent();
@@ -189,8 +186,7 @@ public class LoginForm extends javax.swing.JDialog {
         if (conn!= null) {
             if (dbConnection.checkLogin(username, password)) {
                 dispose();
-                new Dashboard(userType, username);
-                //new Home(); //temporary while waiting for the Dashboard class completion
+                new Dashboard(userType, username);         
             } else {
                 JOptionPane.showMessageDialog(null, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
             }
