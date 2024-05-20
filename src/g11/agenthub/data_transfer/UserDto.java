@@ -1,6 +1,6 @@
 package src.g11.agenthub.data_transfer;
 
-import java.io.File;
+// import java.io.File;
 
 public class UserDto {
     private int id;
@@ -10,7 +10,7 @@ public class UserDto {
     private String username;
     private String password;
     private String Role;
-    private File image;
+    // private File image;
 
     public int getId() {
         return id;
@@ -68,11 +68,11 @@ public class UserDto {
         this.Role = Role;
     }
 
-    public File getImage() {
-        return image;
-    }
+    // public File getImage() {
+    //     return image;
+    // }
 
-    public void setImage(File image) {
-        this.image = image;
-    }
+    // public void setImage(File image) {
+    //     this.image = image;
+    // }
 }

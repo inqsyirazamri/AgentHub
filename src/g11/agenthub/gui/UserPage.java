@@ -2,6 +2,7 @@ package src.g11.agenthub.gui;
 
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -9,6 +10,8 @@ import java.sql.SQLException;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.BorderLayout;
+import java.awt.Component;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -33,19 +36,23 @@ public class UserPage extends JDialog {
     private JButton refreshBtn;
     private JTable table;
     private String user;
+    @SuppressWarnings("rawtypes")
     private JComboBox userComboBox;
-    private UserDto userdto;;
+    private UserDto userdto;
+   
 
     public UserPage() {
         initComponents();
         loadDatas();
         setTitle("User Management");
         setSize(650, 500);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        Point p = new Point(420, 200);
+        setLocation(p);
+        setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         setVisible(true);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private void initComponents() {
         userComboBox = new javax.swing.JComboBox();
         userNameTxt = new JTextField(20);
@@ -152,13 +159,16 @@ public class UserPage extends JDialog {
             JOptionPane.showMessageDialog(null, "Select a table data first!");
         } else {
             new UserDao().deleteUserDao(String.valueOf(table.getValueAt(table.getSelectedRow(), 3)));
+            JOptionPane.showMessageDialog(this, "User Deleted Successfully", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
             loadDatas();
         }
     }
 
     private void editUser() {
         if(table.getSelectedRow()<0){
-            JOptionPane.showMessageDialog(null,"Select a table data first!");
+            JOptionPane.showMessageDialog(
+                null,"Select a table data first!");
         }else{
             UserDto userdto=new UserDto(); 
                 user=(String)userComboBox.getSelectedItem();
@@ -181,13 +191,14 @@ public class UserPage extends JDialog {
             userdto.setEmail(userEmailTxt.getText());
             userdto.setPhone(userPhoneTxt.getText());       
             userdto.setRole((String) userComboBox.getSelectedItem());
-            new UserDao().addUserDao(userdto, user);
+            new UserDao().addUserDao(userdto, user);      
+            if ("ADMINISTRATOR".equals(user)) {
+                JOptionPane.showMessageDialog(null, "New user administrator added");
+            } else {
+                JOptionPane.showMessageDialog(null, "New user agent added");
+            }
             loadDatas();
-            if ("ADMINISTRATOR".equals(user))
-                JOptionPane.showMessageDialog(null, "NEW ADMINISTRATOR ADDED");
-            else
-                JOptionPane.showMessageDialog(null, "NEW USER ADDED");
-            clear();
+            // clear();
         }
     }
 

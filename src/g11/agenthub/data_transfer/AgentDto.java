@@ -1,6 +1,12 @@
 package src.g11.agenthub.data_transfer;
 
 public class AgentDto {
+    private int AgentId;
+    private String AgentCode;
+    private String fullName;
+    private String Email;
+    private String phone;
+    private double balance;
 
     public int getAgentId() {
         return AgentId;
@@ -42,22 +48,6 @@ public class AgentDto {
         this.phone = phone;
     }
 
-    public double getDebit() {
-        return debit;
-    }
-
-    public void setDebit(double debit) {
-        this.debit = debit;
-    }
-
-    public double getCredit() {
-        return credit;
-    }
-
-    public void setCredit(double credit) {
-        this.credit = credit;
-    }
-
     public double getBalance() {
         return balance;
     }
@@ -65,14 +55,5 @@ public class AgentDto {
     public void setBalance(double balance) {
         this.balance = balance;
     }
-
-    private int AgentId;
-    private String AgentCode;
-    private String fullName;
-    private String Email;
-    private String phone;
-    private double debit;
-    private double credit;
-    private double balance;
 
 }

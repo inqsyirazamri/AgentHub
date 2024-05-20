@@ -15,6 +15,7 @@ public class AgentDao extends BuildTableModel {
     Statement stmt = null;
     ResultSet rs = null;
 
+    @SuppressWarnings("resource")
     public AgentDao() {
         try {
             con = new DbConnection().getConnection();
@@ -64,7 +65,6 @@ public class AgentDao extends BuildTableModel {
             pstmt.setString(3, agentdto.getEmail());
             pstmt.setString(4, agentdto.getPhone());
             pstmt.executeUpdate();
-            // JOptionPane.showMessageDialog(null, "Inserted Successfully!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,15 +72,13 @@ public class AgentDao extends BuildTableModel {
 
     public void editAgentDao(AgentDto agentdto) {
         try {
-            String query = "UPDATE agents SET agentcode=?,fullname=?,Email=?,phone=? WHERE agentcode=?";
+            String query = "UPDATE agents SET fullname=?,Email=?,phone=? WHERE agentcode=?";
             pstmt = (PreparedStatement) con.prepareStatement(query);
-            pstmt.setString(1, agentdto.getAgentCode());
-            pstmt.setString(2, agentdto.getFullName());
-            pstmt.setString(3, agentdto.getEmail());
-            pstmt.setString(4, agentdto.getPhone());
-            pstmt.setString(5, agentdto.getAgentCode());
+            pstmt.setString(1, agentdto.getFullName());
+            pstmt.setString(2, agentdto.getEmail());
+            pstmt.setString(3, agentdto.getPhone());
+            pstmt.setString(4, agentdto.getAgentCode());
             pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Updated Successfully");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Nothing updated! Click the table data first!");
         }
@@ -92,7 +90,6 @@ public class AgentDao extends BuildTableModel {
             pstmt = con.prepareStatement(query);
             pstmt.setString(1, value);
             pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Deleted..");
         } catch (SQLException e) {
 
         }
@@ -116,6 +113,20 @@ public class AgentDao extends BuildTableModel {
             rs = stmt.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return rs;
+    }
+
+    public ResultSet getAgentByCode(String agentCode) throws SQLException {
+        ResultSet rs = null;
+        String query = "SELECT fullname, Email, phone FROM agents WHERE agentcode = ?";
+        try {
+            pstmt = con.prepareStatement(query);
+            pstmt.setString(1, agentCode);
+            rs = pstmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
         }
         return rs;
     }

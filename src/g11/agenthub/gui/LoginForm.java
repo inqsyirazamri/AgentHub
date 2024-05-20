@@ -10,6 +10,7 @@ import java.sql.Connection;
 
 import src.g11.agenthub.db_connect.DbConnection;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
@@ -17,7 +18,6 @@ public class LoginForm extends javax.swing.JDialog {
     // constants
     private static final String USERNAME_LABEL = "Username";
     private static final String PASSWORD_LABEL = "Password";
-    private static final String LOGIN_BUTTON_TEXT = "Login";
 
     // variables
     private javax.swing.JLabel usernameLabel;
@@ -27,10 +27,10 @@ public class LoginForm extends javax.swing.JDialog {
     private javax.swing.JButton loginButton;
     private javax.swing.JButton cancelButton;
     private javax.swing.JComboBox<String> userTypeBox;
-    // end of variables
+    private JLabel userTypeLabel;
 
     public LoginForm() {
-        initComponents();      
+        initComponents();
     }
 
     private void initComponents() {
@@ -39,28 +39,33 @@ public class LoginForm extends javax.swing.JDialog {
         loginButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         userTypeBox = new javax.swing.JComboBox<>();
+        userTypeLabel = new javax.swing.JLabel("What are you?");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Login");
 
+        createUserTypeLabel();
         createUserTypeBox();
         createUsernameComponent();
         createPasswordComponent();
         createLoginButton();
         createCancelButton();
-        
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(userTypeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(userTypeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                Short.MAX_VALUE)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(usernameLabel)
-                                                        .addComponent(passwordLabel))
+                                                        .addComponent(passwordLabel)
+                                                        .addComponent(userTypeLabel))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout
                                                         .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
@@ -70,19 +75,18 @@ public class LoginForm extends javax.swing.JDialog {
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                 188, Short.MAX_VALUE))
                                                 .addGap(18, 18, 18)
-                                                // .addGroup(layout
-                                                //         .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                //         .addComponent(loginButton)
-                                                //         .addComponent(cancelButton))
-                                                // .addGap(22, 22, 22)
-                                                ))));
+                                                .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(cancelButton)
+                                                .addGap(22, 22, 22)))));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                // .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 114,
-                                //         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(userTypeLabel)
+                                .addGap(18, 18, 18)
                                 .addComponent(userTypeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 54,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -90,31 +94,26 @@ public class LoginForm extends javax.swing.JDialog {
                                         .addComponent(usernameLabel)
                                         .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(21, 21, 21)
-                                                .addComponent(passwordLabel)
-                                                .addGap(23, 23, 23))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout
-                                                .createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)))
-                                // .addGap(1, 1, 1)
-                                // .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                //         .addGroup(layout.createSequentialGroup()
-                                //                 .addComponent(loginButton)
-                                //                 .addGap(9, 9, 9)
-                                //                 .addComponent(cancelLabel))
-                                //         .addGroup(layout.createSequentialGroup()
-                                //                 .addComponent(loginButton)
-                                //                 .addGap(1, 1, 1)
-                                //                 .addComponent(loginLabel)))
-                                // .addContainerGap(12, Short.MAX_VALUE)
-                                ));
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(passwordLabel)
+                                        .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(loginButton)
+                                        .addComponent(cancelButton))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         pack();
+    }
+
+    private void createUserTypeBox() {
+        userTypeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrator", "Agent" }));
+    }
+
+    private void createUserTypeLabel() {
+        userTypeLabel = new javax.swing.JLabel("Who are you?");
     }
 
     private void createUsernameComponent() {
@@ -123,7 +122,8 @@ public class LoginForm extends javax.swing.JDialog {
         usernameField.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.BLACK));
         usernameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usernameFieldActionPerformed(evt);            }
+                usernameFieldActionPerformed(evt);
+            }
         });
     }
 
@@ -139,7 +139,8 @@ public class LoginForm extends javax.swing.JDialog {
     }
 
     private void createLoginButton() {
-        loginButton = new javax.swing.JButton(LOGIN_BUTTON_TEXT);
+        // loginButton = new javax.swing.JButton(LOGIN_BUTTON_TEXT);
+        loginButton = new javax.swing.JButton("Login");
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 loginButtonMouseClicked(evt);
@@ -156,11 +157,6 @@ public class LoginForm extends javax.swing.JDialog {
         });
     }
 
-    private void createUserTypeBox() {
-        userTypeBox = new javax.swing.JComboBox<>();
-        userTypeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrator", "Agent" }));
-    }
-
     private void usernameFieldActionPerformed(ActionEvent evt) {
         // swing have default action for this. Press "Enter" after typing username will
         // trigger this event
@@ -169,7 +165,8 @@ public class LoginForm extends javax.swing.JDialog {
     }
 
     private void passwordFieldKeyPressed(KeyEvent evt) {
-        // swing have default action for this. Every character of your password will be masking with "*"
+        // swing have default action for this. Every character of your password will be
+        // masking with"*"
         // code to trigger login button when Enter key is pressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             loginButtonMouseClicked(null);
@@ -177,37 +174,44 @@ public class LoginForm extends javax.swing.JDialog {
     }
 
     private void loginButtonMouseClicked(MouseEvent evt) {
-    String username = usernameField.getText();
-    String password = encryptPassword(passwordField.getText());
-    String userType = (String) userTypeBox.getSelectedItem();
+        String username = usernameField.getText();
+        String password = encryptPassword(new String(passwordField.getPassword()));
+        String userType = (String) userTypeBox.getSelectedItem();
 
-    try (DbConnection dbConnection = new DbConnection()) {
-        Connection conn = dbConnection.getConnection();
-        if (conn!= null) {
-            if (dbConnection.checkLogin(username, password)) {
-                dispose();
-                new Dashboard(userType, username);         
+        try (DbConnection dbConnection = new DbConnection()) {
+            Connection conn = dbConnection.getConnection();
+            if (conn != null) {
+                if (dbConnection.checkLogin(username, password)) {
+                    String role = dbConnection.getRole(username);
+                    if (role != null && role.equalsIgnoreCase(userType)) {
+                        dispose();
+                        new Dashboard(userType, username);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "User role does not match the selected type", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Invalid username or password", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Failed to connect to the database", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Failed to connect to the database", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
 
     private String encryptPassword(String input) {
         String encryptedPassword = null;
         if (input == null)
             return null;
-        try{
-            MessageDigest digest=MessageDigest.getInstance("MD5");
-            digest.update(input.getBytes(),0,input.length());
-            encryptedPassword=new BigInteger(1,digest.digest()).toString(16);
-        }
-        catch(Exception e){
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(input.getBytes(), 0, input.length());
+            encryptedPassword = new BigInteger(1, digest.digest()).toString(16);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return encryptedPassword;

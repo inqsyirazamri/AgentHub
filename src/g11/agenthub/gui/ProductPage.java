@@ -2,18 +2,17 @@ package src.g11.agenthub.gui;
 
 import src.g11.agenthub.data_access.ProductDao;
 import src.g11.agenthub.data_transfer.ProductDto;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class ProductPage extends JDialog {
     private ProductDto productdto;
-    private int userId = 1;
     private JTextField productCodeTxt;
     private JTextField productNameTxt;
     private JTextField agentPriceTxt;
@@ -30,20 +29,19 @@ public class ProductPage extends JDialog {
 
     public ProductPage(String user) {
         initComponents();
-        // productCodeTxt.setVisible(false);
+        productCodeTxt.setVisible(false);
         loadDatas();
         setTitle("Product Management");
         setSize(650, 500);
-        setLocationRelativeTo(null);
-        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        // setExtendedState(JFrame.MAXIMIZED_BOTH);
+        Point p = new Point(420, 200);
+        setLocation(p);
+        setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         setVisible(true);
     }
 
     private void initComponents() {
         // Create GUI components
-        // productCodeTxt = new JTextField(20);
+        productCodeTxt = new JTextField(20);
         productNameTxt = new JTextField(20);
         agentPriceTxt = new JTextField(20);
         sellingPriceTxt = new JTextField(20);
@@ -57,15 +55,8 @@ public class ProductPage extends JDialog {
         searchTxt = new JTextField(20);
         searchByLbl = new JLabel("Search by Product Name / Product Code");
 
-        // productCodeTxt.addActionListener(new java.awt.event.ActionListener() {
-        //     public void actionPerformed(java.awt.event.ActionEvent evt) {
-        //         productCodeTxtActionPerformed(evt);
-        //     }
-        // });
-
         // Set up GUI layout
         JPanel northPanel = new JPanel();
-        // northPanel.add(new JLabel("PRODUCT"));
         northPanel.add(searchByLbl);
         northPanel.add(searchTxt);
         northPanel.add(searchBtn);
@@ -73,9 +64,6 @@ public class ProductPage extends JDialog {
         JPanel eastPanel = new JPanel();
         eastPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.LINE_START;
-        gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.LINE_START;
 
@@ -116,6 +104,13 @@ public class ProductPage extends JDialog {
 
         add(mainPanel);
 
+        table.addMouseListener(new MouseAdapter() {
+            // @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
+
         // Add listeners
         addProductBtn.addActionListener(e -> addProduct());
         editProductBtn.addActionListener(e -> editProduct());
@@ -147,20 +142,16 @@ public class ProductPage extends JDialog {
         int row = table.getSelectedRow();
         int column = table.getColumnCount();
         Object[] val = new Object[column];
-        for(int i = 0; i < column; i++) {
-            val[i]=table.getValueAt(row, i);
+        for (int i = 0; i < column; i++) {
+            val[i] = table.getValueAt(row, i);
         }
 
         productCodeTxt.setText(val[0].toString());
         productNameTxt.setText(val[1].toString());
         agentPriceTxt.setText(val[2].toString());
         sellingPriceTxt.setText(val[3].toString());
-        productCode=val[1].toString();
+        productCode = val[0].toString();
     }
-
-    // private void productCodeTxtActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_productCodeTxtActionPerformed
-    //     // TODO add your handling code here:
-    // }
 
     private void addProduct() {
         productdto = new ProductDto();
@@ -176,34 +167,40 @@ public class ProductPage extends JDialog {
             JOptionPane.showMessageDialog(this, "Product Added Successfully", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
             loadDatas(); // refresh the table with the updated data
+            clear();
         }
-        clear();
     }
 
     private void editProduct() {
-        productdto = new ProductDto();
-        productdto.setProductName(productNameTxt.getText());
-        productdto.setAgentPrice(Integer.parseInt(agentPriceTxt.getText()));
-        productdto.setSellingPrice(Integer.parseInt(sellingPriceTxt.getText()));
-        productdto.setProductCode((String) table.getValueAt(table.getSelectedRow(), 0));
-
-        ProductDao productdao = new ProductDao();
-        productdao.editProductDao(productdto);
-        loadDatas();
-        JOptionPane.showMessageDialog(this, "Product Updated Successfully", "Success",
-                JOptionPane.INFORMATION_MESSAGE);
-        clear();
+        if (table.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(
+                    null, "Select a table data first!");
+        } else {
+            productdto = new ProductDto();
+            if (productNameTxt.getText().equals("") || agentPriceTxt.getText().equals("")
+                    || sellingPriceTxt.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Please fill all the fields!");
+            } else {
+                productdto.setProductCode(productCodeTxt.getText());
+                productdto.setProductName(productNameTxt.getText());
+                productdto.setAgentPrice(Double.parseDouble(agentPriceTxt.getText()));
+                productdto.setSellingPrice(Double.parseDouble(sellingPriceTxt.getText()));
+                new ProductDao().editProductDao(productdto);
+                JOptionPane.showMessageDialog(this, "Product Updated Successfully", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                loadDatas();
+            }
+        }
     }
 
     private void deleteProduct() {
         int row = table.getSelectedRow();
         String productCode = (String) table.getValueAt(row, 0);
-
         ProductDao productdao = new ProductDao();
         productdao.deleteProductDao(productCode);
-        loadDatas();
         JOptionPane.showMessageDialog(this, "Product Deleted Successfully", "Success",
                 JOptionPane.INFORMATION_MESSAGE);
+        loadDatas();
         clear();
     }
 
@@ -222,17 +219,20 @@ public class ProductPage extends JDialog {
     }
 
     private void clear() {
+        // productCodeTxt.setText("");
         productNameTxt.setText("");
         agentPriceTxt.setText("");
         sellingPriceTxt.setText("");
     }
 
+    @SuppressWarnings("unused")
     private void populateDatas(ProductDto productdto) {
         productNameTxt.setText(productdto.getProductName());
         agentPriceTxt.setText(String.valueOf(productdto.getAgentPrice()));
         sellingPriceTxt.setText(String.valueOf(productdto.getSellingPrice()));
     }
 
+    @SuppressWarnings("unused")
     private class MyTableModel extends DefaultTableModel {
         public MyTableModel(Object[][] data, Object[] columnNames) {
             super(data, columnNames);

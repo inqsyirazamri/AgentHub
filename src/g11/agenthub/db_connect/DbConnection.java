@@ -5,20 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-//import java.sql.Statement;
 
 public class DbConnection implements AutoCloseable {
-    // variables
-
     private String dbUrl;
     private String dbUser;
     private String dbPass;
     private String dbDriver;
     private Connection conn;
-    // private Statement stmt;
-    // private ResultSet rs;
-
-    // end of variables
 
     public DbConnection() {
         this.dbUrl = "jdbc:mysql://localhost:3306/agenthub";
@@ -37,22 +30,41 @@ public class DbConnection implements AutoCloseable {
         return conn;
     }
 
+    @Override
     public void close() throws SQLException {
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            throw new SQLException("Error closing connection: " + e.getMessage());
+        if (conn != null && !conn.isClosed()) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new SQLException("Error closing connection: " + e.getMessage());
+            }
         }
     }
 
     public boolean checkLogin(String username, String password) throws SQLException {
-        String query = "SELECT * FROM users WHERE username = ? AND password = ? AND role='ADMINISTRATOR' LIMIT 1";
+        String query = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ? LIMIT 1";
         try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(query)) {
+                PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
-            return rs.next();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
         }
+        return false;
+    }
+
+    public String getRole(String username) throws SQLException {
+        String query = "SELECT role FROM users WHERE username = ? LIMIT 1";
+        try (Connection connection = getConnection();
+                PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("role");
+            }
+        }
+        return null;
     }
 }

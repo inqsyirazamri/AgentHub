@@ -20,6 +20,7 @@ public class UserDao extends BuildTableModel {
     Statement stmt = null;
     ResultSet rs = null;
 
+    @SuppressWarnings("resource")
     public UserDao() {
         try {
             con = new DbConnection().getConnection();
@@ -69,7 +70,7 @@ public class UserDao extends BuildTableModel {
                 encPass = new UserPage().encryptPassword(password);
             }
 
-            String query = "INSERT INTO users (fullname,email, phone, username, password, role) VALUES(?,?,?,?,?,?)";
+            String query = "INSERT INTO users VALUES(null,?,?,?,?,?,?)";
             pstmt = (PreparedStatement) con.prepareStatement(query);
             pstmt.setString(1, UserDto.getFullName());
             pstmt.setString(2, UserDto.getEmail());

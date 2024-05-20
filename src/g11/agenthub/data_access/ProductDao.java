@@ -12,7 +12,6 @@ import java.sql.Statement;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 public class ProductDao {
     Connection con = null;
@@ -23,6 +22,7 @@ public class ProductDao {
     ResultSet rs = null;
 
 
+    @SuppressWarnings("resource")
     public ProductDao() {
         try {
             con = new DbConnection().getConnection();
@@ -32,16 +32,6 @@ public class ProductDao {
             e.printStackTrace();
         }
     }
-
-    // public ResultSet getSuppliersInfo() {
-    //     try {
-    //         String query = "SELECT * FROM suppliers";
-    //         rs = stmt.executeQuery(query);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    //     return rs;
-    // }
 
     public ResultSet getCustomersInfo() {
         try {
@@ -116,16 +106,16 @@ public class ProductDao {
         return productCode;
     }
 
-    String customerCode;
-
-    public String getCustomerCode(String customersName) {
-        try {
-            String query = "SELECT customercode FROM customers WHERE fullname='" + customersName + "'";
-            rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                customerCode = rs.getString("customercode");
+    public int getCustomerCode(String customerName) {
+        int customerCode = -1;
+        String query = "SELECT cid FROM customers WHERE customername = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, customerName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                customerCode = rs.getInt("cid");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return customerCode;
@@ -174,57 +164,87 @@ public class ProductDao {
             pstmt.setDouble(4, productdto.getSellingPrice());
             
             pstmt.executeUpdate();
-            // JOptionPane.showMessageDialog(null, "Inserted Successfully! Now you can purchase the product..");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // addPurchaseDAO
-    public void addPurchaseDAO(ProductDto productdto) {
-
+    public void addPurchaseDao(ProductDto productdto) {
         try {
-            String q = "INSERT INTO purchaseinfo VALUES(null,?,?,?,?,?)";
-            pstmt = (PreparedStatement) con.prepareStatement(q);
-            pstmt.setString(1, productdto.getSupplierCode());
-            pstmt.setString(2, productdto.getProductCode());
-            pstmt.setString(3, productdto.getDate());
+            String q = "INSERT INTO purchaseinfo (cid, pid, productname, quantity, purchaseDate, totalcost) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(q);
+            pstmt.setInt(1, productdto.getCustomerId()); // Assuming ProductDto has a customerId field
+            pstmt.setInt(2, productdto.getProductId()); // Assuming ProductDto has a productId field
+            pstmt.setString(3, productdto.getProductName());
             pstmt.setInt(4, productdto.getQuantity());
-            pstmt.setDouble(5, productdto.getTotalCost());
+            pstmt.setString(5, productdto.getPurchaseDate());
+            pstmt.setDouble(6, productdto.getTotalCost());
             pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Inserted Successfully");
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        String productCode = productdto.getProductCode();
-        // if (stocks.checkStock(productCode, stmt) == true) {
-            try {
-                String q = "UPDATE currentstocks SET quantity=quantity+? WHERE productcode=?";
-                pstmt = (PreparedStatement) con.prepareStatement(q);
-                pstmt.setDouble(1, productdto.getQuantity());
-                pstmt.setString(2, productdto.getProductCode());
-
-                pstmt.executeUpdate();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
     }
+
+    public String getProductNameByCode(String productCode) {
+        String productName = null;
+        String query = "SELECT productname FROM products WHERE productCode = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, productCode);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                productName = rs.getString("productname");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productName;
+    }
+
+    public int getCustomerIdByName(String customerName) {
+        int customerId = -1;
+        String query = "SELECT cid FROM customers WHERE customername = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, customerName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                customerId = rs.getInt("cid");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerId;
+    }
+
+    public int getProductIdByCode(String productCode) {
+        int productId = -1;
+        String query = "SELECT pid FROM products WHERE productcode = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, productCode);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                productId = rs.getInt("pid");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productId;
+    }
+
 
     public void editProductDao(ProductDto productdto) {
         try {
             String query = "UPDATE products SET productname=?,agentprice=?,sellingprice=? WHERE productcode=?";
             pstmt = (PreparedStatement) con.prepareStatement(query);
+            // pstmt.setString(1, productdto.getProductCode());
             pstmt.setString(1, productdto.getProductName());
             pstmt.setDouble(2, productdto.getAgentPrice());
-            pstmt.setDouble(3, productdto.getSellingPrice());
-            pstmt.setString(5, productdto.getProductCode());
+            pstmt.setDouble(3, productdto.getSellingPrice());  
+            pstmt.setString(4, productdto.getProductCode());
+            // pstmt.setInt(5, productdto.getProductId());
             pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Updated Successfully");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void editStock(String val, int q) {
@@ -243,21 +263,6 @@ public class ProductDao {
         }
     }
 
-    public void editSoldStock(String val, int q) {
-        try {
-            String query = "SELECT * FROM currentstocks WHERE productcode = '" + val + "'";
-            rs = stmt.executeQuery(query);
-            if (rs.next()) {
-                String qry = "UPDATE currentstocks SET quantity=quantity+? WHERE productcode=?";
-                pstmt = (PreparedStatement) con.prepareStatement(qry);
-                pstmt.setDouble(1, q);
-                pstmt.setString(2, val);
-                pstmt.executeUpdate();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void deleteProductDao(String value) {
         try {
@@ -265,73 +270,19 @@ public class ProductDao {
             pstmt = con.prepareStatement(query);
             pstmt.setString(1, value);
             pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Deleted..");
         } catch (SQLException e) {
             e.printStackTrace();
         }
         
     }
 
-    public void deletePurchaseDAO(String value) {
+    public void deletePurchaseDao(int purchaseId) {
         try {
-            String query = "delete from purchaseinfo where purchaseid=?";
-            pstmt = con.prepareStatement(query);
-            pstmt.setString(1, value);
+            String q = "DELETE FROM purchaseinfo WHERE purchaseid = ?";
+            pstmt = con.prepareStatement(q);
+            pstmt.setInt(1, purchaseId);
             pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Deleted..");
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        // stocks.deleteStock(stmt);
-    }
-
-    public void deleteSalesDAO(String value) {
-        try {
-            String query = "delete from salesreport where salesid=?";
-            pstmt = con.prepareStatement(query);
-            pstmt.setString(1, value);
-            pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Deleted..");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        // stocks.deleteStock(stmt);
-    }
-
-    public void sellProductDAO(ProductDto productDTO, String username) {
-        int quantity = 0;
-        String sellDate = productDTO.getSellDate();
-        String productCode = productDTO.getProductCode();
-        String customersCode = productDTO.getCustomerCode();
-        Double sellingPrice = productDTO.getSellingPrice();
-        Double totalRevenue = productDTO.getTotalRevenue();
-        int qty = productDTO.getQuantity();
-        try {
-            String query = "SELECT * FROM currentstocks WHERE productcode='" + productDTO.getProductCode() + "'";
-            rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                productCode = rs.getString("productcode");
-                quantity = rs.getInt("quantity");
-            }
-            if (productDTO.getQuantity() > quantity) {
-                JOptionPane.showMessageDialog(null, "Quantity Insufficient");
-            } else if (productDTO.getQuantity() <= 0) {
-                JOptionPane.showMessageDialog(null, "Invalid Quantity");
-            } else {
-                try {
-                    String q = "UPDATE currentstocks SET quantity=quantity-'" + productDTO.getQuantity()
-                            + "' WHERE productcode='" + productDTO.getProductCode() + "'";
-                    String qry = "INSERT INTO salesreport(date,productcode,customercode,quantity,revenue,soldby) VALUES('"
-                            + sellDate + "','" + productCode + "','" + customersCode + "','" + qty + "','"
-                            + totalRevenue + "','" + username + "')";
-                    stmt.executeUpdate(q);
-                    stmt.executeUpdate(qry);
-                    JOptionPane.showMessageDialog(null, "SUCCESSFULLY SOLD");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -344,37 +295,22 @@ public class ProductDao {
             e.printStackTrace();
         }
         return rs;
-    }// end of method getQueryResult
+    }
 
-    public ResultSet getPurchaseResult() {
+    public ResultSet getPurchaseResult() { //modify the purchaseinfo table for easier viewing. Eg: instead of viewing the id, view the name.
         try {
-            String query = "SELECT purchaseid,purchaseinfo.productcode,productname,quantity,totalcost FROM purchaseinfo INNER JOIN products ON products.productcode=purchaseinfo.productcode ORDER BY purchaseid";
+            String query = "SELECT purchaseinfo.purchaseid, products.productname, customers.customerName, purchaseinfo.quantity, purchaseinfo.purchaseDate, purchaseinfo.totalcost "
+                    +
+                    "FROM purchaseinfo " +
+                    "INNER JOIN products ON purchaseinfo.pid = products.pid " +
+                    "INNER JOIN customers ON purchaseinfo.cid = customers.cid " +
+                    "ORDER BY purchaseinfo.purchaseid";
             rs = stmt.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return rs;
-    }// end of method getQueryResult
-
-    public ResultSet getQueryResultOfCurrentStocks() {
-        try {
-            String query = "SELECT currentstocks.productcode,products.productname,currentstocks.quantity,products.qgentprice,products.sellingprice FROM currentstocks INNER JOIN products ON currentstocks.productcode=products.productcode";
-            rs = stmt.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return rs;
-    }// end of method getQueryResult
-
-    public ResultSet getSalesReportQueryResult() {
-        try {
-            String query = "SELECT salesid,salesreport.productcode,productname,salesreport.quantity,revenue,soldby FROM salesreport INNER JOIN products ON salesreport.productcode=products.productcode";
-            rs = stmt.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return rs;
-    }// end of method getQueryResult
+    }
 
     public ResultSet getSearchProductsQueryResult(String searchTxt) {
         try {
@@ -398,18 +334,6 @@ public class ProductDao {
         return rs;
     }
 
-    public ResultSet getSearchSalesQueryResult(String searchTxt) {
-        try {
-            String query = "SELECT salesid,salesreport.productcode,productname,quantity,revenue,soldby FROM salesreport INNER JOIN products ON products.productcode=salesreport.productcode INNER JOIN customers ON customers.customercode=salesreport.customercode WHERE salesreport.productcode LIKE '%"
-                    + searchTxt + "%' OR productname LIKE '%" + searchTxt + "%' OR soldby LIKE '%" + searchTxt
-                    + "%' OR fullname LIKE '%" + searchTxt + "%' ORDER BY salesid";
-            rs = stmt.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return rs;
-    }
-
     public ResultSet getProductName(String pcode) {
         try {
             String query = "SELECT productname FROM products WHERE productcode='" + pcode + "'";
@@ -418,21 +342,6 @@ public class ProductDao {
             e.printStackTrace();
         }
         return rs;
-    }
-
-    public String getProductsSupplier(int id) {
-        String sup = null;
-        try {
-            String query = "SELECT fullname FROM suppliers INNER JOIN purchaseinfo ON suppliers.suppliercode=purchaseinfo.suppliercode WHERE purchaseid='"
-                    + id + "'";
-            rs = stmt.executeQuery(query);
-            if (rs.next()) {
-                sup = rs.getString("fullname");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return sup;
     }
 
     public String getProductsCustomer(int id) {
@@ -464,33 +373,12 @@ public class ProductDao {
         return p;
     }
 
-    public String getSoldDate(int salesid) {
-        String p = null;
-        try {
-            String query = "SELECT date FROM salesreport WHERE salesid='" + salesid + "'";
-            rs = stmt.executeQuery(query);
-            if (rs.next()) {
-                p = rs.getString("date");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return p;
-    }
-
-    /***
-     * Refactoring name: EXTRACT METHOD
-     * To remove multiple responsibilities: Extracted code block from
-     * buildTableModel() and,
-     * Created two new methods getColumnNames() and tableModel() and,
-     * Passed appropriate variables and return appropriate values
-     */
     public DefaultTableModel buildTableModel(ResultSet rs) throws SQLException {
         Vector<String> columnNames = getColumnNames(rs);
         Vector<Vector<Object>> data = tableModel(rs, columnNames);
 
         return new DefaultTableModel(data, columnNames);
-    }// end of method DefaultTableModel
+    }
 
     public Vector<String> getColumnNames(ResultSet rs) throws SQLException {
         ResultSetMetaData metaData = rs.getMetaData(); // resultset ko metadata
@@ -516,15 +404,5 @@ public class ProductDao {
             data.add(vector);
         }
         return data;
-    }
-
-    public TableModel getProductsTableModel() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProductsTableModel'");
-    }
-
-    public TableModel searchProductsTableModel(String text) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchProductsTableModel'");
     }
 }

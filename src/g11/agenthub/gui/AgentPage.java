@@ -7,7 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.awt.event.MouseAdapter;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -16,14 +16,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
 import src.g11.agenthub.data_access.AgentDao;
 import src.g11.agenthub.data_transfer.AgentDto;
 
 
 public class AgentPage extends JDialog  {
     private AgentDto agentdto;
-    private int userId = 1;
+    // private int userId = 1;
     private JTextField agentNameTxt;
     private JTextField agentEmailTxt;
     private JTextField agentPhoneTxt;
@@ -32,22 +31,22 @@ public class AgentPage extends JDialog  {
     private JButton deleteAgentBtn;
     private JButton clearBtn;
     private JButton refreshBtn;
+    private JTextField agentCodeTxt;
     private JTable table;
 
     public AgentPage() {
         initComponents();
-        // AgentCodeTxt.setVisible(false);
+        agentCodeTxt.setVisible(false);
         loadDatas();
         setTitle("Agent Management");
         setSize(650, 500);
         setLocationRelativeTo(null);
-        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        // setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         setVisible(true);
     }
 
     private void initComponents() {
+        agentCodeTxt = new JTextField(20);
         agentNameTxt = new JTextField(20);
         agentEmailTxt = new JTextField(20);
         agentPhoneTxt = new JTextField(20);
@@ -103,12 +102,35 @@ public class AgentPage extends JDialog  {
 
         add(mainPanel);
 
+        table.addMouseListener(new MouseAdapter() {
+            // @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
+
         // Add listeners
         addAgentBtn.addActionListener(e -> addAgent());
         editAgentBtn.addActionListener(e -> editAgent());
         deleteAgentBtn.addActionListener(e -> deleteAgent());
         clearBtn.addActionListener(e -> clear());
         refreshBtn.addActionListener(e -> loadDatas());
+    }
+
+    static String agentCode;
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {
+        int row = table.getSelectedRow();
+        int column = table.getColumnCount();
+        Object[] val = new Object[column];
+        for(int i = 0; i < column; i++) {
+            val[i]=table.getValueAt(row, i);
+        }
+        agentCodeTxt.setText(val[0].toString());
+        agentNameTxt.setText(val[1].toString());
+        agentEmailTxt.setText(val[2].toString());
+        agentPhoneTxt.setText(val[3].toString());
+        agentCode = val[0].toString();
     }
 
     private void clear() {
@@ -135,33 +157,24 @@ public class AgentPage extends JDialog  {
     }
 
     private void editAgent() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow >= 0) {
-            agentdto = new AgentDto();
-
-            String agentCode = (String) table.getValueAt(selectedRow, 0);
-            String fullName = (String) table.getValueAt(selectedRow, 1);
-            String agentEmail = (String) table.getValueAt(selectedRow, 2);
-            String agentPhone = (String) table.getValueAt(selectedRow, 3);
-
-            agentNameTxt.setText(fullName); // populate the full name text field
-            agentEmailTxt.setText(agentEmail); // populate the agent email text field
-            agentPhoneTxt.setText(agentPhone); // populate the agent phone text field
-            
-            agentdto.setAgentCode(agentCode);
-            agentdto.setFullName(fullName);
-            agentdto.setEmail(agentEmail);
-            agentdto.setPhone(agentPhone);
-
-            AgentDao agentdao = new AgentDao();
-            agentdao.editAgentDao(agentdto);
-            loadDatas();
-            JOptionPane.showMessageDialog(this, "Agent Updated Successfully", "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-            clear();
+        if (table.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(
+                    null, "Select a table data first!");
         } else {
-            JOptionPane.showMessageDialog(this, "Please select a row to edit", "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            agentdto = new AgentDto();
+            if (agentNameTxt.getText().equals("") || agentEmailTxt.getText().equals("")
+                    || agentPhoneTxt.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Please fill all the fields!");
+            } else {
+                agentdto.setAgentCode(agentCodeTxt.getText());
+                agentdto.setFullName(agentNameTxt.getText());
+                agentdto.setEmail(agentEmailTxt.getText());
+                agentdto.setPhone(agentPhoneTxt.getText());
+                new AgentDao().editAgentDao(agentdto);
+                JOptionPane.showMessageDialog(this, "Agent Updated Successfully", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                loadDatas();
+            }
         }
     }
 

@@ -1,44 +1,55 @@
 USE agenthub;
 
+---
+-- ALTER TABLE purchaseinfo ADD FOREIGN KEY (cid) REFERENCES customers(cid);
+-- ALTER TABLE purchaseinfo ADD FOREIGN KEY (pid) REFERENCES products(pid);
+-- ALTER TABLE customers ADD FOREIGN KEY (sid) REFERENCES agents(sid);
+-- ALTER TABLE customers DROP FOREIGN KEY customers_ibfk_1;
+---
+
+DROP TABLE IF EXISTS `purchaseinfo`;
+DROP TABLE IF EXISTS `customers`;
+DROP TABLE IF EXISTS `agents`;
+DROP TABLE IF EXISTS `products`;
+DROP TABLE IF EXISTS `users`;
+
 --
 -- Table structure for table `users`
 --
-DROP TABLE users;
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `fullname` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `phone` varchar(10) NOT NULL,
-  `username` varchar(20) NOT NULL,
-  `password` varchar(200) NOT NULL,
-  `role` varchar(20) NOT NULL
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `fullname` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(50) NOT NULL,
+  `phone` VARCHAR(15) NOT NULL,
+  `username` VARCHAR(20) NOT NULL,
+  `password` VARCHAR(200) NOT NULL,
+  `role` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`id`)
 );
 
 --
 -- Dumping data for table `users`
 --
-
 INSERT INTO `users` (`id`, `fullname`, `email`, `phone`, `username`, `password`, `role`) VALUES
 (12, 'Nur Inqsyira bt Zamri', 'cira@gmail.com', '0194732486', 'user1', 'cc03e747a6afbbcbf8be7668acfebee5', 'ADMINISTRATOR'),
 (13, 'Daniel Suhaimi', 'dan@gmail.com', '0123456789', 'user2', 'cc03e747a6afbbcbf8be7668acfebee5', 'AGENT'),
-(14, 'Mohamed Arique bin Mohd Aziyen', 'arique@gmail.com', '9876543210', 'user3', 'affec3b64cf90492377a8114c86fc093', 'AGENT');
+(14, 'Mohamed Arique bin Mohd Aziyen', 'arique@gmail.com', '9876543210', 'user3', 'cc03e747a6afbbcbf8be7668acfebee5', 'AGENT');
 
 --
 -- Table structure for table `products`
 --
-DROP TABLE products;
 CREATE TABLE `products` (
-  `pid` int(3) NOT NULL,
-  `productcode` varchar(5) NOT NULL,
-  `productname` varchar(50) NOT NULL,
-  `agentprice` double NOT NULL,
-  `sellingprice` double NOT NULL
+  `pid` INT(11) NOT NULL AUTO_INCREMENT,
+  `productcode` VARCHAR(7) NOT NULL,
+  `productname` VARCHAR(50) NOT NULL,
+  `agentprice` DOUBLE NOT NULL,
+  `sellingprice` DOUBLE NOT NULL,
+  PRIMARY KEY (`pid`)
 );
 
 --
 -- Dumping data for table `products`
 --
-
 INSERT INTO `products` (`pid`, `productcode`, `productname`, `agentprice`, `sellingprice`) VALUES
 (01, 'prod1', 'The City Works Tokyo Notebook', 79, 95),
 (02, 'prod2', 'The City Works Melbourne Notebook', 89, 109),
@@ -50,56 +61,91 @@ INSERT INTO `products` (`pid`, `productcode`, `productname`, `agentprice`, `sell
 --
 -- Table structure for table `agents`
 --
-DROP TABLE agents;
 CREATE TABLE `agents` (
-  `sid` int(11) NOT NULL,
-  `agentcode` varchar(100) NOT NULL,
-  `fullname` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `phone` varchar(10) NOT NULL
-) 
+  `sid` INT(11) NOT NULL AUTO_INCREMENT,
+  `agentcode` VARCHAR(7) NOT NULL,
+  `fullname` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(50) NOT NULL,
+  `phone` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`sid`)
+);
 
 --
 -- Dumping data for table `agents`
 --
-
 INSERT INTO `agents` (`sid`, `agentcode`, `fullname`, `email`, `phone`) VALUES
 (69, 'age5', 'Daniel Suhaimi', 'dan@gmail.com', '0123456789'),
 (68, 'age4', 'Mohamed Arique bin Mohd Aziyen', 'arique@gmail.com', '9876543210');
 
 --
--- Indexes for table `products`
+-- Table structure for table `customers`
 --
-ALTER TABLE `products`
-  ADD PRIMARY KEY (`pid`);
+CREATE TABLE `customers` (
+  `cid` INT(11) NOT NULL AUTO_INCREMENT,
+  `customerCode` VARCHAR(7) NOT NULL,
+  `customerName` VARCHAR(50) NOT NULL,
+  `phone` VARCHAR(15) NOT NULL,
+  `shippingAddress` VARCHAR(100) NOT NULL,
+  `sid` INT(11) NOT NULL, 
+  `customerNotes` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`cid`),
+  FOREIGN KEY (sid) REFERENCES agents(sid)
+);
 
 --
--- Indexes for table `agents`
+-- Dumping data for table `customers`
 --
-ALTER TABLE `agents`
-  ADD PRIMARY KEY (`sid`);
+INSERT INTO `customers` (`cid`, `customerCode`, `customerName`, `phone`, `shippingAddress`, `sid`, `customerNotes`) VALUES
+(1, 'C001', 'Mr. Nava', '011123456789', 'Cyberjaya, Selangor', 68, 'Followed up on the order of customized notebooks. Awaiting confirmation from production team. ' );
 
 --
--- Indexes for table `users`
+-- Table structure for table `purchaseinfo`
 --
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+CREATE TABLE `purchaseinfo` (
+  `purchaseid` INT(11) NOT NULL AUTO_INCREMENT,
+  `cid` INT(11) NOT NULL,
+  `pid` INT(11) NOT NULL,  -- Foreign key referencing products table
+  `productname` VARCHAR(50) NOT NULL,
+  `quantity` INT(100) NOT NULL,
+  `purchaseDate` VARCHAR(200) NOT NULL,
+  `totalcost` DOUBLE NOT NULL,
+  PRIMARY KEY (`purchaseid`),
+  FOREIGN KEY (cid) REFERENCES customers(cid),
+  FOREIGN KEY (pid) REFERENCES products(pid)
+);
 
 --
--- AUTO_INCREMENT for table `users`
+-- Dumping data for table `purchaseinfo`
 --
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+INSERT INTO `purchaseinfo` (`purchaseid`, `cid`, `pid`, `productname`, `quantity`, `purchaseDate`, `totalcost`) VALUES
+(19, 1, 1, 'The City Works Tokyo Notebook', 2, 'Tue May 14 16:42:44 MYT 2024', '190.0'),
+(20, 1, 2, 'The City Works Melbourne Notebook', 1, 'Tue May 14 16:42:44 MYT 2024', '109.0'),
+(21, 1, 3, 'The City Works Malaysia Notebook', 3, 'Tue May 14 16:42:44 MYT 2024', '357.0');
 
---
--- AUTO_INCREMENT for table `products`
---
-ALTER TABLE `products`
-  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+-- Create Admin View
+CREATE OR REPLACE VIEW admin_purchaseinfo AS
+SELECT 
+    p.purchaseid, p.cid, p.pid, p.quantity, p.purchaseDate, p.totalcost,
+    c.customerName, c.phone AS customerPhone, c.shippingAddress, c.customerNotes,
+    a.fullname AS agentName, a.email AS agentEmail, a.phone AS agentPhone
+FROM 
+    purchaseinfo p
+JOIN 
+    customers c ON p.cid = c.cid
+JOIN 
+    agents a ON c.sid = a.sid;
 
---
--- AUTO_INCREMENT for table `agents`
---
-ALTER TABLE `agents`
-  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
-
+-- Create Agent View
+CREATE OR REPLACE VIEW agent_purchaseinfo AS
+SELECT 
+    p.purchaseid, p.cid, p.pid, p.quantity, p.purchaseDate, p.totalcost,
+    c.customerName, c.phone AS customerPhone, c.shippingAddress, c.customerNotes,
+    a.fullname AS agentName, a.email AS agentEmail, a.phone AS agentPhone
+FROM 
+    purchaseinfo p
+JOIN 
+    customers c ON p.cid = c.cid
+JOIN 
+    agents a ON c.sid = a.sid
+WHERE 
+    a.email = CURRENT_USER();
