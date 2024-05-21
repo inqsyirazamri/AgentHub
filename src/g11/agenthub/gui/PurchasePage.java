@@ -162,7 +162,7 @@ public class PurchasePage extends JDialog {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 productCodeTxtActionPerformed(evt);
             }
-        }); 
+        });
         productCodeTxt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 productCodeTxtKeyReleased(evt);
@@ -176,8 +176,13 @@ public class PurchasePage extends JDialog {
             }
         });
 
-        CustomerInfoLab.setForeground(new java.awt.Color(0, 0, 51));
-        CustomerInfoLab.setText("trytest custinfolab          ");
+        // // TEMPORARY
+        // CustomerInfoLab.setForeground(Color.WHITE);
+        // CustomerInfoLab.setText("Account Summary by Day: " +
+        // "\nTotal Customer: 1 || " +
+        // "\nTotal Invoice: RM0 || " +
+        // "\nTotal Sales: RM0 || " +
+        // "\nTotal Income: RM0");
 
         // // Create the table and scroll pane
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -191,7 +196,7 @@ public class PurchasePage extends JDialog {
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(scrollPane, BorderLayout.CENTER);
 
-        JPanel southPanel= new JPanel();
+        JPanel southPanel = new JPanel();
         southPanel.add(CustomerInfoLab);
 
         // Add the panels to the frame
@@ -236,8 +241,9 @@ public class PurchasePage extends JDialog {
                 agentPriceTxt.setText(agentPrice.toString());
             } else {
                 productNameLab.setText("Not associated with any Products!");
-                // JOptionPane.showMessageDialog(this, "The product code does not exist!", "Error",
-                //         JOptionPane.INFORMATION_MESSAGE);
+                // JOptionPane.showMessageDialog(this, "The product code does not exist!",
+                // "Error",
+                // JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -354,16 +360,18 @@ public class PurchasePage extends JDialog {
     // // Method to adjust the column widths of the table based on the length of
     // // contents of its column
     // private void adjustColumnWidths(JTable table) {
-    //     for (int column = 0; column < table.getColumnCount(); column++) {
-    //         int width = 100; // Minimum width
-    //         for (int row = 0; row < table.getRowCount(); row++) {
-    //             TableCellRenderer renderer = table.getCellRenderer(row, column);
-    //             Component comp = table.prepareRenderer(renderer, row, column);
-    //             width = Math.max(comp.getPreferredSize().width + 10, width);
-    //         }
-    //         width = Math.max(table.getTableHeader().getColumnModel().getColumn(column).getPreferredWidth(), width);
-    //         table.getColumnModel().getColumn(column).setPreferredWidth(width);
-    //     }
+    // for (int column = 0; column < table.getColumnCount(); column++) {
+    // int width = 100; // Minimum width
+    // for (int row = 0; row < table.getRowCount(); row++) {
+    // TableCellRenderer renderer = table.getCellRenderer(row, column);
+    // Component comp = table.prepareRenderer(renderer, row, column);
+    // width = Math.max(comp.getPreferredSize().width + 10, width);
+    // }
+    // width =
+    // Math.max(table.getTableHeader().getColumnModel().getColumn(column).getPreferredWidth(),
+    // width);
+    // table.getColumnModel().getColumn(column).setPreferredWidth(width);
+    // }
     // }
 
     public void loadDatas() {
@@ -380,18 +388,19 @@ public class PurchasePage extends JDialog {
     String productCode;
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {
-    int row = table.getSelectedRow();
-    int column = table.getColumnCount();
-    Object[] val = new Object[column];
-    for (int i = 0; i < column; i++) {
-    val[i] = table.getValueAt(row, i);
-    }
-    purchaseIdTxt.setText(val[0].toString());
-    String cust = new ProductDao().getProductsCustomer(Integer.parseInt(purchaseIdTxt.getText()));
-    CustomerInfoLab.setText("Purchased by " + cust);
-    String purchasedDate = new ProductDao().getPurchasedDate(Integer.parseInt(purchaseIdTxt.getText()));
-    purchasedDateLab.setText(purchasedDate);
-    quantity = Integer.parseInt(val[3].toString());
-    productCode = val[1].toString();
+        int row = table.getSelectedRow();
+        int column = table.getColumnCount();
+        Object[] val = new Object[column];
+        for (int i = 0; i < column; i++) {
+            val[i] = table.getValueAt(row, i);
+        }
+        purchaseIdTxt.setText(val[0].toString());
+        // String cust = new
+        // ProductDao().getProductsCustomer(Integer.parseInt(purchaseIdTxt.getText()));
+        // CustomerInfoLab.setText("Purchased by " + cust);
+        String purchasedDate = new ProductDao().getPurchasedDate(Integer.parseInt(purchaseIdTxt.getText()));
+        purchasedDateLab.setText(purchasedDate);
+        quantity = Integer.parseInt(val[3].toString());
+        productCode = val[1].toString();
     }
 }

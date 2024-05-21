@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 
-
 public class UserDao extends BuildTableModel {
 
     Connection con = null;
@@ -44,6 +43,14 @@ public class UserDao extends BuildTableModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public ResultSet getUserQueryResult(String userId) throws SQLException {
+        String query = "SELECT * FROM users WHERE id = ?";
+        PreparedStatement pstmt = con.prepareStatement(query);
+        pstmt.setString(1, userId); // Set the parameter value after initialization
+        ResultSet rs = pstmt.executeQuery();
+        return rs;
     }
 
     public void addFunction(UserDto UserDto, String user) {

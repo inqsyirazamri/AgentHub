@@ -1,9 +1,18 @@
 package src.g11.agenthub.gui;
 
+import src.audit.AuditLog;
+import src.backup.DatabaseBackup;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Dashboard extends JFrame {
     private JPanel mainPanel;
@@ -16,7 +25,12 @@ public class Dashboard extends JFrame {
     private JButton addCustomersButton;
     private JButton manageUsersButton;
     private JButton backButton;
+    private JButton logoutButton;
     private String username;
+    private JMenuBar menuBar;
+    private JMenu backupMenu;
+    private JMenuItem backupMenuItem;
+    private JMenuItem viewAuditLogsMenuItem;
 
     public Dashboard(String userType, String username) {
         this.username = username;
@@ -25,8 +39,6 @@ public class Dashboard extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH); // Make the application fullscreen
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // welcomeTextArea = new JTextArea("Welcome, " + username + " to AgentHub!");
 
         if (userType.equalsIgnoreCase("Admin")) {
             setupAdminDashboard();
@@ -82,6 +94,16 @@ public class Dashboard extends JFrame {
         addCustomersButton = createLinkButton("4. Manage Customers");
         manageUsersButton = createLinkButton("5. Manage Users");
         backButton = createLinkButton("Back");
+        logoutButton = createLinkButton("Logout");
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AuditLog.logEvent(username, "Logout");
+                new LoginForm();
+                dispose();
+            }
+        });
 
         // Adding components to the menu panel
         menuPanel.add(Box.createVerticalStrut(40));
@@ -98,21 +120,61 @@ public class Dashboard extends JFrame {
         menuPanel.add(manageUsersButton);
         menuPanel.add(Box.createVerticalStrut(50)); // Spacing
         menuPanel.add(backButton);
+        menuPanel.add(Box.createVerticalStrut(10)); // Spacing
+        menuPanel.add(logoutButton);
 
         mainPanel.add(menuPanel, BorderLayout.WEST);
 
         add(mainPanel);
+
+        setupMenuBar();
+    }
+
+    private void setupMenuBar() {
+        menuBar = new JMenuBar();
+        backupMenu = new JMenu("Backup/View Audit Logs");
+        backupMenuItem = new JMenuItem("Backup");
+        viewAuditLogsMenuItem = new JMenuItem("View Audit Logs");
+
+        backupMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                int returnValue = fileChooser.showSaveDialog(Dashboard.this);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    String location = file.getAbsolutePath();
+                    String filename = location + ".sql";
+                    try {
+                        DatabaseBackup.backupDatabase(filename);
+                        JOptionPane.showMessageDialog(Dashboard.this, "Backup successful: " + filename);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(Dashboard.this, "Backup failed: " + ex.getMessage(), "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
+        viewAuditLogsMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewAuditLogs();
+            }
+        });
+
+        backupMenu.add(backupMenuItem);
+        backupMenu.add(viewAuditLogsMenuItem);
+        menuBar.add(backupMenu);
+        setJMenuBar(menuBar);
     }
 
     private void setupAdminDashboard() {
         menuLabel.setText("Admin Dashboard - Please select an option:");
-        // agentsButton.setVisible(false);
-        // agentsProfileButton.setVisible(false);
     }
 
     private void setupAgentDashboard() {
         menuLabel.setText("Agent Dashboard - Please select an option:");
-        // usersButton.setVisible(false);
     }
 
     private JButton createLinkButton(String text) {
@@ -151,7 +213,7 @@ public class Dashboard extends JFrame {
 
     private void showMenu(String menu, String username) {
         if (menu.contains("Profile")) {
-            new AgentPage();
+            new ProfilePage(username);
         } else if (menu.contains("Products")) {
             new ProductPage(username);
         } else if (menu.contains("Purchases")) {
@@ -163,6 +225,23 @@ public class Dashboard extends JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "You selected " + menu, "Menu", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    private void viewAuditLogs() {
+        JTextArea auditLogTextArea = new JTextArea(20, 50);
+        auditLogTextArea.setEditable(false);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("audit_log.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                auditLogTextArea.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JScrollPane scrollPane = new JScrollPane(auditLogTextArea);
+        JOptionPane.showMessageDialog(this, scrollPane, "Audit Logs", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private static class GradientPanel extends JPanel {

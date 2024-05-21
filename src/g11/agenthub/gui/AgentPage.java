@@ -19,8 +19,7 @@ import javax.swing.JTextField;
 import src.g11.agenthub.data_access.AgentDao;
 import src.g11.agenthub.data_transfer.AgentDto;
 
-
-public class AgentPage extends JDialog  {
+public class AgentPage extends JDialog {
     private AgentDto agentdto;
     // private int userId = 1;
     private JTextField agentNameTxt;
@@ -123,8 +122,8 @@ public class AgentPage extends JDialog  {
         int row = table.getSelectedRow();
         int column = table.getColumnCount();
         Object[] val = new Object[column];
-        for(int i = 0; i < column; i++) {
-            val[i]=table.getValueAt(row, i);
+        for (int i = 0; i < column; i++) {
+            val[i] = table.getValueAt(row, i);
         }
         agentCodeTxt.setText(val[0].toString());
         agentNameTxt.setText(val[1].toString());
@@ -179,44 +178,44 @@ public class AgentPage extends JDialog  {
     }
 
     private void addAgent() {
-    agentdto = new AgentDto();
-    if (agentNameTxt.getText().equals("") || agentEmailTxt.getText().equals("")
-            || agentPhoneTxt.getText().equals("")) {
-        JOptionPane.showMessageDialog(null, "Please fill all the fields!");
-    } else {
-        String agentCode = generateNewAgentCode();
-        agentdto.setAgentCode(agentCode);
-        agentdto.setFullName(agentNameTxt.getText());
-        agentdto.setEmail(agentEmailTxt.getText());
-        agentdto.setPhone(agentPhoneTxt.getText());
-
-        AgentDao agentdao = new AgentDao();
-        agentdao.addAgentDao(agentdto);
-        loadDatas(); // refresh the table with the updated data
-
-        JOptionPane.showMessageDialog(this, "Agent Added Successfully", "Success",
-                JOptionPane.INFORMATION_MESSAGE);
-        clear();
-    }
-}
-
-private String generateNewAgentCode() {
-    try {
-        AgentDao agentDao = new AgentDao();
-        ResultSet rs = agentDao.getQueryResult();
-
-        if (!rs.next()) {
-            return "age1";
+        agentdto = new AgentDto();
+        if (agentNameTxt.getText().equals("") || agentEmailTxt.getText().equals("")
+                || agentPhoneTxt.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Please fill all the fields!");
         } else {
-            String oldAgentCode = rs.getString("agentcode");
-            Integer scode = Integer.parseInt(oldAgentCode.substring(3)) + 1;
-            return "age" + scode;
+            String agentCode = generateNewAgentCode();
+            agentdto.setAgentCode(agentCode);
+            agentdto.setFullName(agentNameTxt.getText());
+            agentdto.setEmail(agentEmailTxt.getText());
+            agentdto.setPhone(agentPhoneTxt.getText());
+
+            AgentDao agentdao = new AgentDao();
+            agentdao.addAgentDao(agentdto);
+            loadDatas(); // refresh the table with the updated data
+
+            JOptionPane.showMessageDialog(this, "Agent Added Successfully", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            clear();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return null;
     }
-}
+
+    private String generateNewAgentCode() {
+        try {
+            AgentDao agentDao = new AgentDao();
+            ResultSet rs = agentDao.getQueryResult();
+
+            if (!rs.next()) {
+                return "age1";
+            } else {
+                String oldAgentCode = rs.getString("agentcode");
+                Integer scode = Integer.parseInt(oldAgentCode.substring(3)) + 1;
+                return "age" + scode;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     private void loadDatas() {
         try {

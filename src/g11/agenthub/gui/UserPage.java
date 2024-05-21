@@ -39,7 +39,6 @@ public class UserPage extends JDialog {
     @SuppressWarnings("rawtypes")
     private JComboBox userComboBox;
     private UserDto userdto;
-   
 
     public UserPage() {
         initComponents();
@@ -134,17 +133,18 @@ public class UserPage extends JDialog {
     protected void userComboBoxActionPerformed(ActionEvent evt) {
     }
 
-    public String encryptPassword(String input){
-        String encPass=null;
-        if(input==null) return null;
-        
-        try{
-            MessageDigest digest=MessageDigest.getInstance("MD5");
-            digest.update(input.getBytes(),0,input.length());
-            encPass=new BigInteger(1,digest.digest()).toString(16);
-        }catch(Exception e){
+    public String encryptPassword(String input) {
+        String encPass = null;
+        if (input == null)
+            return null;
+
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(input.getBytes(), 0, input.length());
+            encPass = new BigInteger(1, digest.digest()).toString(16);
+        } catch (Exception e) {
             e.printStackTrace();
-        }        
+        }
         return encPass;
     }
 
@@ -166,32 +166,33 @@ public class UserPage extends JDialog {
     }
 
     private void editUser() {
-        if(table.getSelectedRow()<0){
+        if (table.getSelectedRow() < 0) {
             JOptionPane.showMessageDialog(
-                null,"Select a table data first!");
-        }else{
-            UserDto userdto=new UserDto(); 
-                user=(String)userComboBox.getSelectedItem();
-                userdto.setFullName(userNameTxt.getText());
-                userdto.setEmail(userEmailTxt.getText());
-                userdto.setPhone(userPhoneTxt.getText());
-                userdto.setRole(user);                             
-                new UserDao().editUserDao(userdto);
-                loadDatas();
-            }
+                    null, "Select a table data first!");
+        } else {
+            UserDto userdto = new UserDto();
+            user = (String) userComboBox.getSelectedItem();
+            userdto.setFullName(userNameTxt.getText());
+            userdto.setEmail(userEmailTxt.getText());
+            userdto.setPhone(userPhoneTxt.getText());
+            userdto.setRole(user);
+            new UserDao().editUserDao(userdto);
+            loadDatas();
         }
+    }
 
     private void addUser() {
         userdto = new UserDto();
-        if (userNameTxt.getText().equals("") || userEmailTxt.getText().equals("") || userPhoneTxt.getText().equals("")) {
+        if (userNameTxt.getText().equals("") || userEmailTxt.getText().equals("")
+                || userPhoneTxt.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please fill all the fields!");
         } else {
             user = (String) userComboBox.getSelectedItem();
             userdto.setFullName(userNameTxt.getText());
             userdto.setEmail(userEmailTxt.getText());
-            userdto.setPhone(userPhoneTxt.getText());       
+            userdto.setPhone(userPhoneTxt.getText());
             userdto.setRole((String) userComboBox.getSelectedItem());
-            new UserDao().addUserDao(userdto, user);      
+            new UserDao().addUserDao(userdto, user);
             if ("ADMINISTRATOR".equals(user)) {
                 JOptionPane.showMessageDialog(null, "New user administrator added");
             } else {
@@ -204,7 +205,7 @@ public class UserPage extends JDialog {
 
     public void loadDatas() {
         try {
-           UserDao userDao = new UserDao();
+            UserDao userDao = new UserDao();
             table.setModel(userDao.buildTableModel(userDao.getQueryResult1()));
 
         } catch (SQLException ex) {

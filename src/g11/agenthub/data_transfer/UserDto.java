@@ -69,10 +69,10 @@ public class UserDto {
     }
 
     // public File getImage() {
-    //     return image;
+    // return image;
     // }
 
     // public void setImage(File image) {
-    //     this.image = image;
+    // this.image = image;
     // }
 }

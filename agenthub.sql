@@ -12,7 +12,6 @@ DROP TABLE IF EXISTS `customers`;
 DROP TABLE IF EXISTS `agents`;
 DROP TABLE IF EXISTS `products`;
 DROP TABLE IF EXISTS `users`;
-
 --
 -- Table structure for table `users`
 --
@@ -118,9 +117,9 @@ CREATE TABLE `purchaseinfo` (
 -- Dumping data for table `purchaseinfo`
 --
 INSERT INTO `purchaseinfo` (`purchaseid`, `cid`, `pid`, `productname`, `quantity`, `purchaseDate`, `totalcost`) VALUES
-(19, 1, 1, 'The City Works Tokyo Notebook', 2, 'Tue May 14 16:42:44 MYT 2024', '190.0'),
-(20, 1, 2, 'The City Works Melbourne Notebook', 1, 'Tue May 14 16:42:44 MYT 2024', '109.0'),
-(21, 1, 3, 'The City Works Malaysia Notebook', 3, 'Tue May 14 16:42:44 MYT 2024', '357.0');
+(19, 1, 1, 'The City Works Tokyo Notebook', 2, '2024-05-20 12:24:34', '190.0'),
+(20, 1, 2, 'The City Works Melbourne Notebook', 1, '2024-05-21 03:24:34', '109.0'),
+(21, 1, 3, 'The City Works Malaysia Notebook', 3, '2024-05-22 02:24:34', '357.0');
 
 -- Create Admin View
 CREATE OR REPLACE VIEW admin_purchaseinfo AS
@@ -145,6 +144,8 @@ FROM
     purchaseinfo p
 JOIN 
     customers c ON p.cid = c.cid
+    
+
 JOIN 
     agents a ON c.sid = a.sid
 WHERE 

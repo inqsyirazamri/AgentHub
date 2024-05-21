@@ -15,7 +15,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class CustomerDao extends BuildTableModel{
+public class CustomerDao extends BuildTableModel {
     Connection con = null;
     PreparedStatement pstmt = null;
     Statement stmt = null;
@@ -33,13 +33,13 @@ public class CustomerDao extends BuildTableModel{
     }
 
     // public ResultSet getCustomersInfo() {
-    //     try {
-    //         String query = "SELECT * FROM customers";
-    //         rs = stmt.executeQuery(query);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    //     return rs;
+    // try {
+    // String query = "SELECT * FROM customers";
+    // rs = stmt.executeQuery(query);
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    // return rs;
     // }
 
     public String getCustomerName(String customerCodeTxt) {
@@ -59,42 +59,43 @@ public class CustomerDao extends BuildTableModel{
     }
 
     // public String getCustomerPhone(String customerCodeTxt) {
-    //     String customerPhone = null;
-    //     try {
-    //         String query = "SELECT phone FROM customers WHERE customerCode=?";
-    //         pstmt = con.prepareStatement(query);
-    //         pstmt.setString(1, customerCodeTxt);
-    //         rs = pstmt.executeQuery();
-    //         if (rs.next()) {
-    //             customerPhone = rs.getString("phone");
-    //         }
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    //     return customerPhone;
+    // String customerPhone = null;
+    // try {
+    // String query = "SELECT phone FROM customers WHERE customerCode=?";
+    // pstmt = con.prepareStatement(query);
+    // pstmt.setString(1, customerCodeTxt);
+    // rs = pstmt.executeQuery();
+    // if (rs.next()) {
+    // customerPhone = rs.getString("phone");
+    // }
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    // return customerPhone;
     // }
 
     // public String getCustomerShippingAddress(String customerCodeTxt) {
-    //     String customerShippingAddress = null;
-    //     try {
-    //         String query = "SELECT shippingAddress FROM customers WHERE customerCode=?";
-    //         pstmt = con.prepareStatement(query);
-    //         pstmt.setString(1, customerCodeTxt);
-    //         rs = pstmt.executeQuery();
-    //         if (rs.next()) {
-    //             customerShippingAddress = rs.getString("shippingAddress");
-    //         }
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    //     return customerShippingAddress;
+    // String customerShippingAddress = null;
+    // try {
+    // String query = "SELECT shippingAddress FROM customers WHERE customerCode=?";
+    // pstmt = con.prepareStatement(query);
+    // pstmt.setString(1, customerCodeTxt);
+    // rs = pstmt.executeQuery();
+    // if (rs.next()) {
+    // customerShippingAddress = rs.getString("shippingAddress");
+    // }
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    // return customerShippingAddress;
     // }
 
     public void addCustomerDao(CustomerDto customerdto) {
         try {
-            // String query = "SELECT * FROM customers WHERE customerCode='" + CustomerDto.getCustomerCode() + "' AND email='"
-            //         + UserDto.getEmail() + "' AND phone='" + UserDto.getPhone() + "' AND role='"
-            //         + UserDto.getRole() + "'";
+            // String query = "SELECT * FROM customers WHERE customerCode='" +
+            // CustomerDto.getCustomerCode() + "' AND email='"
+            // + UserDto.getEmail() + "' AND phone='" + UserDto.getPhone() + "' AND role='"
+            // + UserDto.getRole() + "'";
             // rs = stmt.executeQuery(query);
             String query = "SELECT * FROM customers WHERE customerName=? AND phone=? AND shippingAddress=? AND sid=? AND customerNotes=?";
             pstmt = con.prepareStatement(query);

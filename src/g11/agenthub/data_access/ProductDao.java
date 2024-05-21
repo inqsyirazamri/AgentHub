@@ -21,7 +21,6 @@ public class ProductDao {
     Statement stmt1 = null;
     ResultSet rs = null;
 
-
     @SuppressWarnings("resource")
     public ProductDao() {
         try {
@@ -162,7 +161,7 @@ public class ProductDao {
             pstmt.setString(2, productdto.getProductName());
             pstmt.setDouble(3, productdto.getAgentPrice());
             pstmt.setDouble(4, productdto.getSellingPrice());
-            
+
             pstmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -230,7 +229,6 @@ public class ProductDao {
         return productId;
     }
 
-
     public void editProductDao(ProductDto productdto) {
         try {
             String query = "UPDATE products SET productname=?,agentprice=?,sellingprice=? WHERE productcode=?";
@@ -238,7 +236,7 @@ public class ProductDao {
             // pstmt.setString(1, productdto.getProductCode());
             pstmt.setString(1, productdto.getProductName());
             pstmt.setDouble(2, productdto.getAgentPrice());
-            pstmt.setDouble(3, productdto.getSellingPrice());  
+            pstmt.setDouble(3, productdto.getSellingPrice());
             pstmt.setString(4, productdto.getProductCode());
             // pstmt.setInt(5, productdto.getProductId());
             pstmt.executeUpdate();
@@ -263,7 +261,6 @@ public class ProductDao {
         }
     }
 
-
     public void deleteProductDao(String value) {
         try {
             String query = "delete from products where productcode=?";
@@ -273,7 +270,7 @@ public class ProductDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
     }
 
     public void deletePurchaseDao(int purchaseId) {
@@ -297,7 +294,8 @@ public class ProductDao {
         return rs;
     }
 
-    public ResultSet getPurchaseResult() { //modify the purchaseinfo table for easier viewing. Eg: instead of viewing the id, view the name.
+    public ResultSet getPurchaseResult() { // modify the purchaseinfo table for easier viewing. Eg: instead of viewing
+                                           // the id, view the name.
         try {
             String query = "SELECT purchaseinfo.purchaseid, products.productname, customers.customerName, purchaseinfo.quantity, purchaseinfo.purchaseDate, purchaseinfo.totalcost "
                     +
@@ -344,28 +342,29 @@ public class ProductDao {
         return rs;
     }
 
-    public String getProductsCustomer(int id) {
-        String cus = null;
-        try {
-            String query = "SELECT fullname FROM customers INNER JOIN salesreport ON customers.customercode=salesreport.customercode WHERE salesid='"
-                    + id + "'";
-            rs = stmt.executeQuery(query);
-            if (rs.next()) {
-                cus = rs.getString("fullname");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return cus;
-    }
+    // public String getProductsCustomer(int id) {
+    // String cus = null;
+    // try {
+    // String query = "SELECT fullname FROM customers INNER JOIN salesreport ON
+    // customers.customercode=salesreport.customercode WHERE salesid='"
+    // + id + "'";
+    // rs = stmt.executeQuery(query);
+    // if (rs.next()) {
+    // cus = rs.getString("fullname");
+    // }
+    // } catch (SQLException e) {
+    // e.printStackTrace();
+    // }
+    // return cus;
+    // }
 
     public String getPurchasedDate(int pur) {
         String p = null;
         try {
-            String query = "SELECT date FROM purchaseinfo WHERE purchaseid='" + pur + "'";
+            String query = "SELECT purchaseDate FROM purchaseinfo WHERE purchaseid='" + pur + "'";
             rs = stmt.executeQuery(query);
             if (rs.next()) {
-                p = rs.getString("date");
+                p = rs.getString("purchaseDate");
             }
         } catch (SQLException e) {
             e.printStackTrace();

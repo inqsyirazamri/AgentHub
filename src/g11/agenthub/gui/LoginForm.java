@@ -1,12 +1,15 @@
 package src.g11.agenthub.gui;
 
+import src.audit.AuditLog;
+import src.backup.DatabaseBackup;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.sql.Connection;
-//import java.sql.SQLException;
+import java.io.File;
 
 import src.g11.agenthub.db_connect.DbConnection;
 
@@ -139,7 +142,6 @@ public class LoginForm extends javax.swing.JDialog {
     }
 
     private void createLoginButton() {
-        // loginButton = new javax.swing.JButton(LOGIN_BUTTON_TEXT);
         loginButton = new javax.swing.JButton("Login");
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -184,6 +186,9 @@ public class LoginForm extends javax.swing.JDialog {
                 if (dbConnection.checkLogin(username, password)) {
                     String role = dbConnection.getRole(username);
                     if (role != null && role.equalsIgnoreCase(userType)) {
+                        JOptionPane.showMessageDialog(null, "Login successful!");
+                        triggerBackup(); // Trigger backup on successful login
+                        AuditLog.logEvent(username, "Login"); // Log the login event
                         dispose();
                         new Dashboard(userType, username);
                     } else {
@@ -219,5 +224,17 @@ public class LoginForm extends javax.swing.JDialog {
 
     private void cancelButtonMouseClicked(MouseEvent evt) {
         dispose();
+    }
+
+    private void triggerBackup() {
+        String backupFilePath = "path_to_backup_directory" + File.separator + "backup_" + System.currentTimeMillis()
+                + ".sql";
+        try {
+            DatabaseBackup.backupDatabase(backupFilePath);
+            JOptionPane.showMessageDialog(this, "Backup successful: " + backupFilePath);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Backup failed: " + ex.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

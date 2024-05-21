@@ -110,7 +110,7 @@ public class CustomerPage extends JDialog {
 
         addCustomerBtn.addActionListener(evt -> addCustomer());
         editCustomerBtn.addActionListener(evt -> editCustomer());
-        deleteCustomerBtn.addActionListener(evt -> deleteCustomer());   
+        deleteCustomerBtn.addActionListener(evt -> deleteCustomer());
         clearBtn.addActionListener(evt -> clear());
         refreshBtn.addActionListener(evt -> loadDatas());
         searchBtn.addActionListener(evt -> searchDatas());
@@ -134,8 +134,9 @@ public class CustomerPage extends JDialog {
             table.setModel(customerdao.buildTableModel(customerdao.getQueryResult()));
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
     }
-    }
+
     private void loadDatas() {
         try {
             CustomerDao customerdao = new CustomerDao();
@@ -148,40 +149,41 @@ public class CustomerPage extends JDialog {
 
     private void addCustomer() {
         customerdto = new CustomerDto();
-            if (customerNameTxt.getText().equals("") || phoneTxt.getText().equals("") || shippingAddressTxt.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Please fill all the fields!");
+        if (customerNameTxt.getText().equals("") || phoneTxt.getText().equals("")
+                || shippingAddressTxt.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Please fill all the fields!");
 
-            } else {
-                customerdto.setCustomerName(customerNameTxt.getText());
-                customerdto.setPhone(phoneTxt.getText());
-                customerdto.setShippingAddress(shippingAddressTxt.getText());
-                customerdto.setCustomerNotes(customerNotesTxt.getText());
-                new CustomerDao().addCustomerDao(customerdto);
-                JOptionPane.showMessageDialog(this, "Customer added successfully", "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-                loadDatas();
-                clear();
-            }   
-        }
-
-    private void editCustomer() {
-            customerdto = new CustomerDto();
+        } else {
             customerdto.setCustomerName(customerNameTxt.getText());
             customerdto.setPhone(phoneTxt.getText());
             customerdto.setShippingAddress(shippingAddressTxt.getText());
             customerdto.setCustomerNotes(customerNotesTxt.getText());
-
-            CustomerDao customerDao = new CustomerDao();
-            customerDao.editCustomerDao(customerdto);
-            loadDatas();
-            JOptionPane.showMessageDialog(this, "Customer updated successfully", "Success",
+            new CustomerDao().addCustomerDao(customerdto);
+            JOptionPane.showMessageDialog(this, "Customer added successfully", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
+            loadDatas();
+            clear();
+        }
+    }
+
+    private void editCustomer() {
+        customerdto = new CustomerDto();
+        customerdto.setCustomerName(customerNameTxt.getText());
+        customerdto.setPhone(phoneTxt.getText());
+        customerdto.setShippingAddress(shippingAddressTxt.getText());
+        customerdto.setCustomerNotes(customerNotesTxt.getText());
+
+        CustomerDao customerDao = new CustomerDao();
+        customerDao.editCustomerDao(customerdto);
+        loadDatas();
+        JOptionPane.showMessageDialog(this, "Customer updated successfully", "Success",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void deleteCustomer() {
         int row = table.getSelectedRow();
         String customerCode = (String) table.getValueAt(row, 1);
-        
+
         CustomerDao customerdao = new CustomerDao();
         customerdao.deleteCustomerDao(customerCode);
         loadDatas();

@@ -98,13 +98,11 @@ public class ProductDto {
     }
 
     public String getCustomerCode() {
-    return customerCode;
+        return customerCode;
     }
 
     public void setCustomerCode(String customerCode) {
-    this.customerCode = customerCode;
+        this.customerCode = customerCode;
     }
-
-    
 
 }

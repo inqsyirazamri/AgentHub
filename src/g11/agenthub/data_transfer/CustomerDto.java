@@ -13,14 +13,15 @@ public class CustomerDto {
     private String customerNotes;
     // private int sid;
 
-    // public CustomerDto(int cid, String customerName, String phone, String shippingAddress, int salesAgentId,
-    //         String customerNotes) {
-    //     this.cid = cid;
-    //     this.customerName = customerName;
-    //     this.phone = phone;
-    //     this.shippingAddress = shippingAddress;
-    //     this.salesAgentId = salesAgentId;
-    //     this.customerNotes = customerNotes;
+    // public CustomerDto(int cid, String customerName, String phone, String
+    // shippingAddress, int salesAgentId,
+    // String customerNotes) {
+    // this.cid = cid;
+    // this.customerName = customerName;
+    // this.phone = phone;
+    // this.shippingAddress = shippingAddress;
+    // this.salesAgentId = salesAgentId;
+    // this.customerNotes = customerNotes;
     // }
 
     // public CustomerDto() {
@@ -83,23 +84,23 @@ public class CustomerDto {
     }
 
     // public ResultSet getCustomersInfo() {
-    //     ResultSet rs = new CustomerDao().getCustomersInfo();
-    //     return rs;
+    // ResultSet rs = new CustomerDao().getCustomersInfo();
+    // return rs;
     // }
 
     // public String getCustomerName(int cid) {
-    //     CustomerDao customerDao = new CustomerDao();
-    //     return customerDao.getCustomerName(String.valueOf(cid));
+    // CustomerDao customerDao = new CustomerDao();
+    // return customerDao.getCustomerName(String.valueOf(cid));
     // }
 
     // public String getCustomerPhone(int cid) {
-    //     CustomerDao customerDao = new CustomerDao();
-    //     return customerDao.getCustomerPhone(String.valueOf(cid));
+    // CustomerDao customerDao = new CustomerDao();
+    // return customerDao.getCustomerPhone(String.valueOf(cid));
     // }
 
     // public String getCustomerShippingAddress(int cid) {
-    //     CustomerDao customerDao = new CustomerDao();
-    //     return customerDao.getCustomerShippingAddress(String.valueOf(cid));
+    // CustomerDao customerDao = new CustomerDao();
+    // return customerDao.getCustomerShippingAddress(String.valueOf(cid));
     // }
 
 }
