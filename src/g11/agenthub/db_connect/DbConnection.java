@@ -14,7 +14,7 @@ public class DbConnection implements AutoCloseable {
     private Connection conn;
 
     public DbConnection() {
-        this.dbUrl = "jdbc:mysql://localhost:3306/agenthub";
+        this.dbUrl = "jdbc:mysql://agenthubmysql.c45zcri8wojr.us-east-1.rds.amazonaws.com:3306/agenthub";
         this.dbUser = "root";
         this.dbPass = "Pa$$w0rd";
         this.dbDriver = "com.mysql.cj.jdbc.Driver";
