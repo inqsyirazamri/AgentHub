@@ -1,77 +1,116 @@
+<h1 align="center">AgentHub – Java Application with MySQL & AWS Deployment</h1>
 
-# Order Management System
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white" />
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+  <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white" />
+</p>
 
-## Overview
+<p align="center">
+    <a href="https://youtu.be/jPQFAgUjRGI?si=Pvywq7YoaDKA2IN0&t=136" target="_blank">
+        <img src="https://img.shields.io/badge/%F0%9F%9A%80%20Live%20App%20Test%20%E2%80%93%20Local%20Deployment-red?style=for-the-badge&logo=youtube" 
+             alt="🚀 Live App Test – Phase 1: Local Deployment">
+    </a>
+    <a href="https://youtu.be/G4hJKZ2Aem8?t=654" target="_blank">
+        <img src="https://img.shields.io/badge/%F0%9F%9A%80%20Live%20App%20Test%20%E2%80%93%20Cloud%20Deployment-red?style=for-the-badge&logo=youtube" 
+             alt="🚀 Live App Test – Phase 2: Cloud Deployment">
+    </a>
+</p>
 
-The Order Management System is a Java Swing-based application designed to manage orders, customers, products, and users with role-based access control. The system includes functionalities for adding, editing, deleting, and viewing records. It supports different user roles such as Admin and Agent, each with specific dashboards and permissions.
+## **📌 Project Overview**
 
+**Title:** AgentHub – Order Management System  
+**Course:** CCS6344 – Database and Cloud Security  
+**Group:** 3 Members  
+**Completion Date:** 4 July 2024
 
-## Features
+**Objective:**  
+AgentHub is a full-stack Java application integrated with MySQL and successfully deployed on AWS Cloud Academy.
+The system facilitates seamless order management between agents and manufacturers, integrating **database security** and **cloud architecture enhancements**. This project focuses on **secure cloud migration**, improving scalability, security posture, and operational resilience.
 
-- User Login and Authentication
-- Role-Based Dashboards (Admin and Agent)
-- Agent Management
-- Customer Management
-- Product Management
-- Order Management
-- Database Backup
-- Profile Viewing
+### **💡 Why This Project Matters**
 
-## File Structure
+AgentHub demonstrates my capability to:
 
-### Database and Connection Management
-- DbConnection.java: Manages the connection to the database.
-- DatabaseBackup.java: Provides functionalities for backing up the database.
+*   **Build enterprise-level Java applications from scratch**
+*   **Design and manage relational databases**
+*   **Deploy applications on cloud infrastructure**
 
-## Data Access Objects (DAOs)
-- AgentDao.java: Data access object for agent-related operations.
-- CustomerDao.java: Data access object for customer-related operations.
-- ProductDao.java: Data access object for product-related operations.
-- UserDao.java: Data access object for user-related operations.
+This project highlights:
 
-## Data Transfer Objects (DTOs)
-- AgentDto.java: Data transfer object for agent data.
-- CustomerDto.java: Data transfer object for customer data.
-- ProductDto.java: Data transfer object for product data.
-- UserDto.java: Data transfer object for user data.
+*   **Full-cycle development skills** – From coding to deployment
+*   **Cloud readiness** – Ability to work with AWS infrastructure
+*   **Database expertise** – Designing and managing RDBMS
+*   **Problem-solving mindset** – Building scalable and secure applications
 
-## UI Pages
-- AgentPage.java: UI for managing agents.
-- AgentProfilePage.java: UI for displaying agent profiles.
-- CustomerPage.java: UI for managing customers.
-- Dashboard.java: Main dashboard UI, with different views for Admin and Agent.
-- LoginForm.java: UI for user login.
-- ProductPage.java: UI for managing products.
-- PurchasePage.java: UI for managing purchases.
-- UserPage.java: UI for managing users.
+## **✨ Key Features**
 
-## Backup
-Use ‘DatabaseBackup.java’ for database backup
+*   **Order Management Automation** – Streamlines agent-manufacturer transactions through purchase tracking and inventory updates.
+*   **Secure User Authentication** – Implements RBAC and MFA to restrict access based on user roles.
+*   **Financial Management Support** – Enables order invoicing and revenue analysis with cloud-based storage.
+*   **Database Backup & Recovery Plan** – Minimizes data loss risks.
 
-## Utilities
-BuildTableModel.java: Utility class for building table models from result sets.
+## **🛠 Tech Stack**
 
-## SQL
-agenthub.sql: SQL script for setting up the database schema and initial data.
+*   **Language:** Java (JDK 8+)
+*   **Database:** MySQL
+*   **Cloud:** AWS Cloud Academy
+*   **Libraries:** JDBC, DAO Pattern
+*   **UI:** Java Swing
 
-## Database
-### Prerequisites
-- Java Development Kit (JDK) 8 or higher
-- MySQL Database
+## **☁ Cloud Architecture**
 
-## Setup:
-1. Clone the Repository
-2. Set up the Database
-- Import ‘agenthub.sql’ file into your MySQL Workbench 
-3. Configure Database Connection
-- Update your database connection details in ‘DbConnection.java’
-private static final String URL = "jdbc:mysql://localhost:3306/agenthub";
+The AgentHub system follows a **hybrid architecture**, combining traditional database security with **AWS cloud infrastructure** for scalability:
 
-private static final String USER = "your_username";
+*   **Virtual Private Cloud (VPC)** – Ensures network isolation and controlled access to cloud services.
+*   **AWS RDS** – Provides encrypted, highly available relational data storage.
+*   **Multi-AZ Deployment** – Strengthens fault tolerance and disaster recovery capabilities.
 
-private static final String PASSWORD = "your_password";
+## **🔐 Security Measures**
 
+*   **Database Security:** ACLs, MD5 password hashing, regular backups.
 
-4. Compile and Run the Application
+<p align="center">
+  <img width="363" height="199" alt="image" src="https://github.com/user-attachments/assets/94db641c-089d-4134-a7b0-92491e2144c8" />
+  <img width="414" height="187" alt="image" src="https://github.com/user-attachments/assets/11122839-6320-492e-b18d-398ac84fd318" />
+  <img width="609" height="397" alt="image" src="https://github.com/user-attachments/assets/55c02284-9f9e-4634-8ec8-2bfab9701458" />
+</p>
 
+*   **Cloud Security:** IAM RBAC, TLS & AES-256 encryption, AWS Shield for DDoS mitigation.
+*   **Threat Modeling:** STRIDE and DREAD frameworks applied.
 
+<p align="center">
+  <img width="555" height="446" alt="image" src="https://github.com/user-attachments/assets/9d9bcd98-ca63-4e88-94b9-48da57ed56a9" />
+</p>
+
+## **🚀 Installation & Setup**
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/inqsyirazamri/AgentHub.git
+    cd agenthubmysql-aws-main/agenthubmysql-aws-main
+    ```
+2.  Import `agenthub.sql` into MySQL. 
+3.  Update `DbConnection.java` with your credentials.
+    ```bash
+    URL      = "jdbc:mysql://<your-host>:<port>/<database-name>";
+    USER     = "<your-username>";
+    PASSWORD = "<your-password>";
+    ```
+   * If you're using **AWS RDS**, use the RDS endpoint for `<your-host>`.
+   * Make sure the port (usually `3306`) is correct.
+   * If you are following step 2, `database-name` is `agenthub`
+     
+5.  Compile & run
+    ```bash
+    javac -d out src/main/AgentHub.java
+    java -cp out AgentHub
+    ```
+    
+## **🔮 Future Improvements**
+
+*   **Web-based Interface** using Spring Boot or React for better scalability.
+*   **CI/CD Pipeline** for automated deployment.
+*   **Enhanced Security** with OAuth 2.0 and advanced encryption.
+*   **Dockerization** for containerized deployment.
+*   **Monitoring & Logging** using AWS CloudWatch.
